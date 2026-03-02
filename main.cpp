@@ -44,7 +44,7 @@ isAtEnd() { ...}
 peek() { ...} 
 
 string val;
-
+size_t line;
         while (!isAtEnd() && peek() != '"') {
             if (peek() == '\n') line++;
             val += advance();

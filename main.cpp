@@ -1,16 +1,220 @@
 #include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
+
+
+
+bool isLetter(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+           (c == '_');
+}
+
+
+
+bool isAlpha(char c) { return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'; }
+
+bool isDigit(char c) { return c >= '0' && c <= '9'; }
+
+bool isAlphaNumeric(char c) { return isAlpha(c) || isDigit(c); }
+
+
+bool my_isspace(char c)
+{
+    return (c == ' '  ||   // 0x20
+            c == '\f' ||   // 0x0C
+            c == '\n' ||   // 0x0A
+            c == '\r' ||   // 0x0D
+            c == '\t' ||   // 0x09
+            c == '\v');    // 0x0B
+}
+
+bool WhiteSpace(int c)
+{
+    unsigned char ch = static_cast<unsigned char>(c);
+
+    return (ch == ' ' || (ch >= 0x09 && ch <= 0x0D));
+}
+
+/*
+isAtEnd() { ...} 
+peek() { ...} 
+
+string val;
+
+        while (!isAtEnd() && peek() != '"') {
+            if (peek() == '\n') line++;
+            val += advance();
+        }
+
+    }
+
+*/
+
 int main(int argc, char*argv[]) {
 
-int a = 15;
-int b = 25;
+enum Tkns {
+    TOKEN_NONE,
+    TOKEN_IDENTIFIER, 
+    TOKEN_NUMBER,   
+    TOKEN_STRING,    
+    
 
-cout << a+b << "\n";
+    TOKEN_AUTO = 1,
+    TOKEN_INT,
+    TOKEN_FLOAT,
+    TOKEN_DOUBLE,
+    TOKEN_STRING_TYPE, 
+    TOKEN_FN,          
+    
+ 
+    TOKEN_PLUS,      
+    TOKEN_MINUS,    
+    TOKEN_STAR,       
+    TOKEN_SLASH,      
+    TOKEN_EQUALS,    
+    TOKEN_SEMICOLON,  
+    TOKEN_LPAREN,    
+    TOKEN_RPAREN,    
+    TOKEN_LBRACE,     
+    TOKEN_RBRACE,    
+    TOKEN_COMMA,     
+    TOKEN_EOF        
+};
+
+struct Token {
+    string type;
+    string value;
+};
+
+std::vector<Token> Tkqns;
+
+string code = "";
+std::string cod2e = R"(
+      auto a = 10 + 5 * 2;
+      auto b = (1 + 2) * 3;
+      auto c = 100 - 20 / 4;
+      str d = "zzzzzz";
+      string d = "ddddddddd";
+)";
+
+
+size_t i = 0, line = 0;
+
+
+while (i < cod2e.length()) {
+	
+	char c = cod2e[i];
+	
+	if (std::isspace(c)) {
+		i++; continue;
+	}
+
+
+	if (isAlpha(c)) {
+		string val;
+		size_t start = i;
+		string typeString;
+		Tkns type;
+		
+		while (i < cod2e.size() && isAlpha(cod2e[i])) {
+            val += cod2e[i];
+            i++;
+      }
+      
+      if (val == "int") {type = TOKEN_INT; typeString = ""; line = 0; }
+    else if (val == "float") {type = TOKEN_FLOAT; typeString = ""; line = 0; }
+    else if (val == "string" || val == "str") {type = TOKEN_STRING_TYPE; typeString = ""; line = 0; }
+    else if (val == "auto") {type = TOKEN_AUTO; typeString = ""; line = 0; }
+    
+    if (type != TOKEN_STRING_TYPE)
+    	Tkqns.push_back({typeString, val});
+    else
+      Tkqns.push_back({typeString, val});
+      
+      continue;
+	}
+
+
+
+
+i++;
+};
+
+
+for (auto dq : Tkqns) {
+	cout << dq.type <<  dq.value << " data \n";
+}
+
+
+cout << "  \n\n\n\n";
+
+std::vector<string> aba;
+aba.push_back("zzzz");
+aba.push_back("zzzzwwwwwwwww");
+
+for(string a : aba) {
+cout << a << "\n";
+}
+
+
+cout << aba.size() << " length of a code \n";
+
+
+
+int aq2 = 15;
+int beqz = 25;
+
+cout << aq2+beqz << "\n";
 
 cout << "Welcome \n ";
 cout << " Js Like programming language, interpretator not a compiled one  \n"; 
+
+
+
+string zq = "aba";
+
+if (isAlpha(zq[0])) {
+	cout << "yeah it is \n";
+} else {
+	
+	cout << "no it isn't \n";
+}
+
+
+
+
+
+/*
+
+string code = "int x = (1+2)*3;";
+string code2 = "int c = 1+2*3;";
+
+cout << "=== LEXER ===" << "\n";
+
+
+
+for (size_t i = 0; i < code.length(); i++) {
+  cout << i << "\n";
+}
+*/
+
+
+
+
+
+
+/*for (size_t i = 0; i < code2.size(); i++) {
+  cout << i << "\n";
+}*/
+
+
+
+
+
 
 return 0;
 }

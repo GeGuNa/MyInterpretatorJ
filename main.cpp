@@ -106,6 +106,7 @@ std::string cod2e = R"(
       int a = 10 + 5 * 2;
       int b = (1 + 2) * 3;
       auto c = 100 - 20 / 4;
+      float fqq = 15.3*2/5;
       D = a + d;
 )";
 
@@ -142,8 +143,8 @@ while (i < cod2e.length()) {
 		else if (val == "float") {type = TOKEN_FLOAT; typeString = "float"; line = 0; }
 		else if (val == "string" || val == "str") {type = TOKEN_STRING_TYPE; typeString = "str"; line = 0; }
 		else if (val == "auto") {type = TOKEN_AUTO; typeString = "auto"; line = 0; }
-		
-		Tkqns.push_back({"" , val});
+		else {type = TOKEN_AUTO; typeString = "token identifier"; line = 0; }
+		Tkqns.push_back({typeString, val});
      	
      
      
@@ -247,7 +248,7 @@ while (i < cod2e.length()) {
 
 
 for (auto dq : Tkqns) {
-	cout << dq.type <<  dq.value << "  \n";
+	cout << dq.type << " " << dq.value << "  \n";
 }
 
 

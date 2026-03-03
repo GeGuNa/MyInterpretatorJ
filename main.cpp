@@ -174,20 +174,30 @@ while (i < cod2e.length()) {
 	
 	if (isDigit(c)) {
 			size_t qwhr = i;
-			
+			bool isFloat = false;
+
 			
 			while (i < cod2e.size() && isdigit(cod2e[i])) {
                i++;
          }
          
+         if (i < cod2e.size() && cod2e[i] == '.') {
+               isFloat = true;
+               i++;
+               while (i < cod2e.size() && isdigit(cod2e[i])) {
+                  i++;
+               }
+         }
+         
 			string intrqz = cod2e.substr(qwhr, i - qwhr);
 
 
+         string tyzzzpe = isFloat ? "Float " : " Integer";
 
 
 
 			
-			Tkqns.push_back({"Number ", intrqz});
+			Tkqns.push_back({tyzzzpe, intrqz});
 
 			continue;
 		}

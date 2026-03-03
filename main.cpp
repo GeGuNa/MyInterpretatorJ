@@ -1,10 +1,19 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
-
+bool iequals(const char* a, const char* b) {
+    while (*a && *b) {
+        if (std::tolower(static_cast<unsigned char>(*a)) != 
+            std::tolower(static_cast<unsigned char>(*b)))
+            return false;
+        ++a; ++b;
+    }
+    return *a == *b;
+}
 
 
 bool isLetter(char c) {
@@ -61,7 +70,7 @@ enum Tkns {
     TOKEN_IDENTIFIER, 
     TOKEN_NUMBER,   
     TOKEN_STRING,    
-    
+    TOKEN_OPERATORS = 2, 
 
     TOKEN_AUTO = 1,
     TOKEN_INT,
@@ -94,11 +103,10 @@ std::vector<Token> Tkqns;
 
 string code = "";
 std::string cod2e = R"(
-      auto a = 10 + 5 * 2;
-      auto b = (1 + 2) * 3;
+      int a = 10 + 5 * 2;
+      int b = (1 + 2) * 3;
       auto c = 100 - 20 / 4;
-      str d = "zzzzzz";
-      string d = "ddddddddd";
+      D = a + d;
 )";
 
 
@@ -112,7 +120,8 @@ while (i < cod2e.length()) {
 	if (std::isspace(c)) {
 		i++; continue;
 	}
-
+	
+	
 
 	if (isAlpha(c)) {
 		string val;
@@ -124,29 +133,111 @@ while (i < cod2e.length()) {
             val += cod2e[i];
             i++;
       }
-      
-      if (val == "int") {type = TOKEN_INT; typeString = ""; line = 0; }
-    else if (val == "float") {type = TOKEN_FLOAT; typeString = ""; line = 0; }
-    else if (val == "string" || val == "str") {type = TOKEN_STRING_TYPE; typeString = ""; line = 0; }
-    else if (val == "auto") {type = TOKEN_AUTO; typeString = ""; line = 0; }
     
-    if (type != TOKEN_STRING_TYPE)
-    	Tkqns.push_back({typeString, val});
-    else
-      Tkqns.push_back({typeString, val});
+    
+    
+    // if (val == "int" || val == "float"||val == "string"||val == "str"||val == "auto") {
+     
+		if (val == "int") {type = TOKEN_INT; typeString = "int"; line = 0; }
+		else if (val == "float") {type = TOKEN_FLOAT; typeString = "float"; line = 0; }
+		else if (val == "string" || val == "str") {type = TOKEN_STRING_TYPE; typeString = "str"; line = 0; }
+		else if (val == "auto") {type = TOKEN_AUTO; typeString = "auto"; line = 0; }
+		
+		Tkqns.push_back({"" , val});
+     	
+     
+     
+   //  } else {
+     
+     
+     
+     
+     //	if (c == '+' || c == '-' || c == '*' || c == '/'  || c == ';'  || c == ')'  || c == '(') 
+	  //    string czq = string(1, c);
+	//	else
+		//	string czq = val;
+     	
+     //		Tkqns.push_back({"Just_Variable ", czq});
+     
+     //}
+
+
+ 
+      
+      
+      
+      
       
       continue;
 	}
+	
+	
+	if (isDigit(c)) {
+			size_t qwhr = i;
+			
+			
+			while (i < cod2e.size() && isdigit(cod2e[i])) {
+               i++;
+         }
+         
+			string intrqz = cod2e.substr(qwhr, i - qwhr);
 
 
 
 
-i++;
-};
+
+			
+			Tkqns.push_back({"Number ", intrqz});
+
+			continue;
+		}
+
+
+	   //if (c != '\0') {
+		//string valqq = string(1, cod2e[i]);
+
+			
+ 			 switch (c) {
+            case '+': Tkqns.push_back({"TOKEN_PLUS", "+"}); break;
+            case '-': Tkqns.push_back({"TOKEN_MINUS", "-"}); break;
+            case '*': Tkqns.push_back({"TOKEN_STAR", "*"}); break;
+            case '/': Tkqns.push_back({"TOKEN_SLASH", "/"}); break;
+            case '=': Tkqns.push_back({"TOKEN_EQUALS", "="}); break;
+            case ';': Tkqns.push_back({"TOKEN_SEMICOLON", ";"}); break;
+            case '(': Tkqns.push_back({"TOKEN_LPAREN", "("}); break;
+            case ')': Tkqns.push_back({"TOKEN_RPAREN", ")"}); break;
+            case '{': Tkqns.push_back({"TOKEN_LBRACE", "{"}); break;
+            case '}': Tkqns.push_back({"TOKEN_RBRACE", "}"}); break;
+            case ',': Tkqns.push_back({"TOKEN_COMMA", ","}); break;
+            default: 
+                std::cerr << "Unknown character: " << c << std::endl; 
+                break;
+        }			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			i++; 
+
+}
+		
+  Tkqns.push_back({"TOKEN_END", ""});    	
+		
+		
+		
+	//}
+
+
+
 
 
 for (auto dq : Tkqns) {
-	cout << dq.type <<  dq.value << " data \n";
+	cout << dq.type <<  dq.value << "  \n";
 }
 
 

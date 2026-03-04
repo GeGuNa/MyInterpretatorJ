@@ -104,12 +104,15 @@ std::vector<Token> Tkqns;
 string code = "";
 std::string cod2e = R"(
 	   int ddd = 15;
+	   float deqqq =  15.3;
       int a = 10 + 5 * 2;
       int b = (1 + 2) * 3;
       auto c = 100 - 20 / 4;
       float fqq = 15.3*2/5;
       D = a + d;
-      str kkkk = "kzkspzj";
+      str kkkk = "aabbcc";
+      str cccc = "bubu";
+      int kz = 1111;
 )";
 
 
@@ -206,14 +209,25 @@ while (i < cod2e.length()) {
 		}
 		
 		if (c == '"') {
+			//cout << cod2e[i] << " zzz11111111111 = \n ";
 			string val;
 			i++;
-		   while (i < cod2e.size() && c != '"') {
-                  i++;
+			
+		   while (i < cod2e.size() && cod2e[i] != '"') {
                   val += cod2e[i];
-         }
-
-			Tkqns.push_back({"", val});
+                  i++;
+                  //cout << cod2e[i+1] << " zzz333333333333333333 = \n ";
+         } i++;
+			//i+=2;
+			
+		//	if (cod2e[i] != ';') {
+			// 	cout << " it shall end with ; \n";
+			//	break;
+		//	}
+			
+			//cout << cod2e[i+1] << " zzz = \n ";
+			
+			Tkqns.push_back({"String", val});
 			continue;
 		}
 

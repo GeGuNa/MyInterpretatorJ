@@ -113,6 +113,13 @@ std::string cod2e = R"(
       str kkkk = "aabbcc";
       str cccc = "bubu";
       int kz = 1111;
+      
+   //kzqwek
+   
+   int llllllllll  = 152;   
+      
+      
+      
 )";
 
 
@@ -149,8 +156,8 @@ while (i < cod2e.length()) {
 		else if (val == "string" || val == "str") {type = TOKEN_STRING_TYPE; typeString = "str"; line = 0; }
 		else if (val == "auto") {type = TOKEN_AUTO; typeString = "auto"; line = 0; }
 		else {type = TOKEN_AUTO; typeString = "token identifier"; line = 0; }
-		Tkqns.push_back({typeString, val});
-     	
+		//Tkqns.push_back({typeString, val});
+     	Tkqns.push_back({"", val});
      
      
    //  } else {
@@ -233,13 +240,45 @@ while (i < cod2e.length()) {
 
 	   //if (c != '\0') {
 		//string valqq = string(1, cod2e[i]);
+		
+		
+		if (c == '/' && cod2e[i+1] == '/') {
+		
+			i+=2;
+		
+		
+				//Tkqns.push_back({"for comments", "/"}); 
+					//i++;
+
+			string val;
+			while (i < cod2e.size() && cod2e[i] != '\n') {
+				val += cod2e[i];
+				i++;
+}
+			
+			Tkqns.push_back({"COMMENTS ", val}); 
+			continue;
+				//i++;
+				
+			
+		
+		
+		}
+		
+		
+		
+		if (c == '/') {
+				Tkqns.push_back({"TOKEN_SLASH", "/"}); 
+				i++;
+				continue;
+		}
 
 			
  			 switch (c) {
             case '+': Tkqns.push_back({"TOKEN_PLUS", "+"}); break;
             case '-': Tkqns.push_back({"TOKEN_MINUS", "-"}); break;
             case '*': Tkqns.push_back({"TOKEN_STAR", "*"}); break;
-            case '/': Tkqns.push_back({"TOKEN_SLASH", "/"}); break;
+            //case '/': Tkqns.push_back({"TOKEN_SLASH", "/"}); break;
             case '=': Tkqns.push_back({"TOKEN_EQUALS", "="}); break;
             case ';': Tkqns.push_back({"TOKEN_SEMICOLON", ";"}); break;
             case '(': Tkqns.push_back({"TOKEN_LPAREN", "("}); break;

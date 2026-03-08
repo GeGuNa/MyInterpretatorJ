@@ -119,6 +119,15 @@ std::string cod2e = R"(
    int llllllllll  = 152;   
       
       
+     if (a > 15) {
+    	 print ("zzz2222");
+     } else {
+     	print ("zzz");
+     } 
+      
+      
+      int adqwe = 155;
+      
       
 )";
 
@@ -155,6 +164,7 @@ while (i < cod2e.length()) {
 		else if (val == "float") {type = TOKEN_FLOAT; typeString = "float"; line = 0; }
 		else if (val == "string" || val == "str") {type = TOKEN_STRING_TYPE; typeString = "str"; line = 0; }
 		else if (val == "auto") {type = TOKEN_AUTO; typeString = "auto"; line = 0; }
+		//else if (val == "if") {type = TOKEN_AUTO; typeString = "if"; line = 0; }
 		else {type = TOKEN_AUTO; typeString = "token identifier"; line = 0; }
 		//Tkqns.push_back({typeString, val});
      	Tkqns.push_back({"", val});
@@ -254,7 +264,7 @@ while (i < cod2e.length()) {
 			while (i < cod2e.size() && cod2e[i] != '\n') {
 				val += cod2e[i];
 				i++;
-}
+			}
 			
 			Tkqns.push_back({"COMMENTS ", val}); 
 			continue;
@@ -272,9 +282,30 @@ while (i < cod2e.length()) {
 				i++;
 				continue;
 		}
+		
+		
+		if (c == '=' && cod2e[i+1] == '=') {
+				Tkqns.push_back({"TOkenIFequal ", "=="}); 
+				i+=2;
+				continue;
+		}
+		
+		if (c == '<' && cod2e[i+1] == '=') {
+				Tkqns.push_back({"lsoreq", "<="}); 
+				i+=2;
+				continue;
+		}
+		
+		if (c == '>' && cod2e[i+1] == '=') {
+				Tkqns.push_back({"gtoreq", ">="}); 
+				i+=2;
+				continue;
+		}
 
 			
  			 switch (c) {
+ 			 case '>': Tkqns.push_back({"TOKEN_GT", ">"}); break;
+ 			 case '<': Tkqns.push_back({"TOKEN_LS", "<"}); break;
             case '+': Tkqns.push_back({"TOKEN_PLUS", "+"}); break;
             case '-': Tkqns.push_back({"TOKEN_MINUS", "-"}); break;
             case '*': Tkqns.push_back({"TOKEN_STAR", "*"}); break;

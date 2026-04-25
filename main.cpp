@@ -2,8 +2,91 @@
 #include <string>
 #include <vector>
 #include <cstring>
-   
+#include <array>
+#include <cstdint>
+#include <stdexcept>
+#include <type_traits>
+
+
 using namespace std;
+
+
+template<int Bits> struct int_traits;
+template<> struct int_traits<8>   { using type = uint8_t; };
+template<> struct int_traits<16>  { using type = uint16_t; };
+template<> struct int_traits<32>  { using type = uint32_t; };
+template<> struct int_traits<64>  { using type = uint64_t; };
+#if defined(__SIZEOF_INT128__)
+template<> struct int_traits<128> { using type = unsigned __int128; };
+#endif
+
+template<int Bits>
+constexpr bool is_supported_width = (Bits == 8 || Bits == 16 || Bits == 32 || Bits == 64 || Bits == 128);
+
+
+
+template<typename T>
+T parse_integer(const std::string& str) {
+    if (str.empty()) throw std::invalid_argument("Empty input string");
+
+    size_t pos = 0;
+    int base = 10;
+    if (str.size() > 2 && str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+        base = 16;
+        pos = 2;
+    }
+
+    T val = 0;
+    constexpr T max_val = static_cast<T>(~0);
+    
+    for (; pos < str.size(); ++pos) {
+        char c = str[pos];
+        int digit = 0;
+        if (c >= '0' && c <= '9')      digit = c - '0';
+        else if (c >= 'a' && c <= 'f') digit = c - 'a' + 10;
+        else if (c >= 'A' && c <= 'F') digit = c - 'A' + 10;
+        else throw std::invalid_argument("Invalid character in integer string");
+
+        if (digit >= base) throw std::invalid_argument("Digit out of range for detected base");
+        if (base == 16 && val > (max_val >> 4)) throw std::overflow_error("Hex overflow");
+        if (base == 10 && val > (max_val / 10)) throw std::overflow_error("Decimal overflow");
+
+        val = val * base + digit;
+    }
+    return val;
+}
+
+
+template<typename T>
+constexpr std::array<uint8_t, sizeof(T)> to_endian_bytes(T value, bool little_endian) {
+    std::array<uint8_t, sizeof(T)> bytes{};
+    for (size_t i = 0; i < sizeof(T); ++i) {
+        size_t idx = little_endian ? i : (sizeof(T) - 1 - i);
+        bytes[idx] = static_cast<uint8_t>(value >> (i * 8));
+    }
+    return bytes;
+}
+
+
+template<int Bits>
+auto to_little_endian(const std::string& s) {
+    static_assert(is_supported_width<Bits>, "Unsupported bit width. Use 8, 16, 32, 64, or 128.");
+#if !defined(__SIZEOF_INT128__) && (Bits == 128)
+    static_assert(sizeof(int) == 0, "128-bit requires compiler with __int128 (GCC/Clang).");
+#endif
+    using T = typename int_traits<Bits>::type;
+    return to_endian_bytes<T>(parse_integer<T>(s), true);
+}
+
+template<int Bits>
+auto to_big_endian(const std::string& s) {
+    static_assert(is_supported_width<Bits>, "Unsupported bit width. Use 8, 16, 32, 64, or 128.");
+#if !defined(__SIZEOF_INT128__) && (Bits == 128)
+    static_assert(sizeof(int) == 0, "128-bit requires compiler with __int128 (GCC/Clang).");
+#endif
+    using T = typename int_traits<Bits>::type;
+    return to_endian_bytes<T>(parse_integer<T>(s), false);
+}
 
 bool iequals(const char* a, const char* b) {
     while (*a && *b) {
